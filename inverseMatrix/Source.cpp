@@ -6,18 +6,27 @@ double** createIdentityMatrix(int n);
 double** copyMatrix(double** matrix, int n);
 void printMatrix(double** matrix, int n);
 void deleteMatrix(double** matrix, int n);
+double summArrsForLUSolve(double* arr1, double* arr2, int startIndex, int endIndex);
 double** LUDecomposition(double** matrix, int n);
+double* LUSolve(double** LUmatrix, double* res, int n);
 //**************************************************************************************
 int main() {
-	double** matr4 = createMatrix(4);
+	double** matr3 = createMatrix(3);
+	double b[] = { -2,7,8 };
+	double** luMatr = LUDecomposition(matr3, 3);
+	double* res = LUSolve(luMatr, b, 3);
 	//double** matr3i = createIdentityMatrix(3);
 	//double** matr5i = createIdentityMatrix(5);
 	//double** Copymatr3 = copyMatrix(matr3,3);
 	//double** Copymatr5i = copyMatrix(matr5i, 5);
-	printMatrix(matr4, 4);
-	double** luMatr = LUDecomposition(matr4, 4);
+	//printMatrix(matr3, 3);
+
 	cout << "************************" << endl;
-	printMatrix(luMatr, 4);
+	for (int i = 0; i < 3; i++)
+		cout << res[i] << "\t";
+	cout << "************************" << endl;
+
+	//printMatrix(luMatr, 3);
 	//printMatrix(matr3i, 3);
 	//cout << "************************" << endl;
 	//printMatrix(matr5i, 5);
@@ -29,8 +38,9 @@ int main() {
 	//deleteMatrix(Copymatr3, 3);
 	//deleteMatrix(matr5i, 5);
 	//deleteMatrix(Copymatr5i, 5);
-	deleteMatrix(matr4, 4);
-	deleteMatrix(luMatr, 4);
+	deleteMatrix(matr3, 3);
+	deleteMatrix(luMatr, 3);
+	delete[] res;
 	return 0;
 }
 // Створює квадратну матрицю розмірності n
@@ -93,6 +103,7 @@ void deleteMatrix(double** matrix, int n) {
 	}
 	delete matrix;
 }
+// Проводить LU-розклад матриці
 double** LUDecomposition(double** matrix, int n) {
 	double** res = copyMatrix(matrix, n);
 	for (int i = 0; i < n; i++) {
@@ -108,4 +119,28 @@ double** LUDecomposition(double** matrix, int n) {
 		}
 	}
 	return res;
+}
+// Суммує добутки відповідних елементів массивів для LUSolve. Включно StartIndex та endIndex
+double summArrsForLUSolve(double* arr1, double* arr2, int startIndex, int endIndex) {
+	double res = 0;
+	for (int i = startIndex; i <= endIndex; i++)
+		res += arr1[i] * arr2[i];
+	return res;
+}
+// Вирішує систему лінійних рівнянь. LUmatrix зберігає матриці L і U 
+double* LUSolve(double** LUmatrix, double* res, int n) {
+	double* x = new double[n];
+	double* y = new double[n];
+	y[0] = res[0];
+	for (int i = 1; i < n; i++) {
+		y[i] = res[i] - summArrsForLUSolve(LUmatrix[i], y, 0, i - 2) - y[i - 1] * LUmatrix[i][i - 1];
+	}
+	cout << "************************" << endl;
+	for (int i = 0; i < n; i++)
+		cout << y[i] << "\t";
+	for (int i = n - 1; i > -1; i--) {
+		x[i] = (y[i] - summArrsForLUSolve(LUmatrix[i], x, i + 1, n - 1)) / LUmatrix[i][i];
+	}
+	delete[] y;
+	return x;
 }
