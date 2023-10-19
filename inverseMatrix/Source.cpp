@@ -1,5 +1,4 @@
 #include <iostream>
-#include"Shtrassen.cpp"
 using namespace std;
 //**************************************************************************************
 double* createArrWithOne(int n);
