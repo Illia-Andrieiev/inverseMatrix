@@ -21,23 +21,11 @@ int main() {
 	double** inverse = inverseMatrix(matr3, 3);
 	cout << "************************" << endl;
 	printMatrix(matr3, 3);
-	
 	cout << "************************" << endl;
 	printMatrix(inverse, 3);
 	cout << "************************" << endl;
 	double** res = createIdentityMatrix(3);
 	printMatrix(res, 3);
-	//printMatrix(matr3i, 3);
-	//cout << "************************" << endl;
-	//printMatrix(matr5i, 5);
-	//cout << "************************" << endl;
-	//printMatrix(Copymatr3, 3);
-	//cout << "************************" << endl;
-	//printMatrix(Copymatr5i, 5);
-	//deleteMatrix(matr3i, 3);
-	//deleteMatrix(Copymatr3, 3);
-	//deleteMatrix(matr5i, 5);
-	//deleteMatrix(Copymatr5i, 5);
 	deleteMatrix(matr3, 3);
 	deleteMatrix(inverse, 3);
 	return 0;
